@@ -20,7 +20,7 @@ class ClientService
             $clients->where('user_id', $user_id);
         });
 
-        $this->applyKeywordFilter($request, $clients);
+        $this->applyFilters($request, $clients);
         $this->applySorting($request, $clients);
 
         $clients = $clients->paginate(20)->appends($request->query());
@@ -28,7 +28,7 @@ class ClientService
         return $clients;
     }
 
-    private function applyKeywordFilter(Request $request, $query)
+    private function applyFilters(Request $request, $query)
     {
         $keyword = $request->query('keyword');
         $status = $request->query('status');
