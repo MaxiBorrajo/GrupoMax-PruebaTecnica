@@ -1,10 +1,9 @@
 import axios from "axios";
 import VueCookies from "vue-cookies";
 
-
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_URL_SERVICE}/api`,
-  withCredentials: true,
+  withCredentials: false,
 });
 
 instance.interceptors.request.use(
@@ -21,7 +20,6 @@ instance.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 
 //Exports
 export default instance;

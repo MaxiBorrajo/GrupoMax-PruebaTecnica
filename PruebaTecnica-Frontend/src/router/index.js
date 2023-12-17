@@ -86,14 +86,14 @@ router.beforeEach(async (to, from, next) => {
   const noAuth = to.meta.noAuth;
 
   if (requireAuth && !VueCookies.isKey("token")) {
-    next({ name: "login" });
+    return next({ name: "login" });
   }
 
   if (noAuth && VueCookies.isKey("token")) {
-    next({ name: "dashboard" });
+    return next({ name: "dashboard" });
   }
 
-  next();
+  return next();
 });
 
 export default router;
