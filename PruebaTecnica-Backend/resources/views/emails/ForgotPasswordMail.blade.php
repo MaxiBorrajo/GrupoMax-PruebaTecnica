@@ -11,6 +11,6 @@
 <body>
     <h1>Reset password</h1>
         <p>To reset your password click the following link (<span style="color:red;">IMPORTANT</span>: You only have ten minutes until expiration): </p>
-        <a href='http://localhost:5137/resetPassword/{{$token}}' rel='noreferrer' referrerpolicy='origin' clicktracking='off'>Change your password</a>
+        <a href='http://localhost:5173/resetPassword/{{$token}}' rel='noreferrer' referrerpolicy='origin' clicktracking='off'>Change your password</a>
 </body>
 </html>
