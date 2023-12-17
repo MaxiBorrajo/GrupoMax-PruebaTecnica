@@ -2,6 +2,6 @@
   <RouterView />
 </template>
 
-<style scoped>
+<script setup></script>
 
-</style>
+<style></style>
