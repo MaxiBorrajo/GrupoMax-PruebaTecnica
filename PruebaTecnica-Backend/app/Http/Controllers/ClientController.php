@@ -22,15 +22,11 @@ class ClientController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        try {
+
             $clients = $this->clientService->getClients($request);
 
             return response()->json(['resource' => $clients], 200);
 
-        } catch (Exception $e) {
-            return response()->json(['error' => $e->getMessage()], $e->getCode());
-
-        }
     }
     public function store(CreateClientRequest $request): JsonResponse
     {
