@@ -1,7 +1,8 @@
 <template>
   <section class="flex justify-center items-center bg-slate-200 min-h-screen">
     <div
-      class="w-96 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center rounded-md form-container"
+      class="w-96 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit
+      sm:rounded-md"
     >
       <h1 class="text-4xl text-slate-800 mb-7 font-semibold">Login CRM</h1>
       <ErrorComponent v-if="showError" :error-message="errorMessage" class="mb-7"/>
