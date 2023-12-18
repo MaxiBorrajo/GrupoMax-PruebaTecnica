@@ -5,7 +5,7 @@
     <div
       class="w-96 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
-      <h1 class="text-4xl text-slate-800 mb-7 font-semibold">Register CRM</h1>
+      <h1 class="text-4xl text-slate-200 mb-7 font-semibold">Register CRM</h1>
       <ErrorComponent
         v-if="showError"
         :error-message="errorMessage"

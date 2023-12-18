@@ -3,10 +3,10 @@
     <div
       class="sm:w-1/2 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
-      <h1 class="text-4xl text-slate-800 mb-7 font-semibold">
+      <h1 class="text-4xl text-slate-200 mb-7 font-semibold">
         Forgot password
       </h1>
-      <h3 class="text-md text-slate-800 mb-7 font-normal">
+      <h3 class="text-md text-slate-200 mb-7 font-normal">
         Enter your email address to sent you a password recovery email
       </h3>
       <ErrorComponent

@@ -3,8 +3,8 @@
     <div
       class="sm:w-1/2 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
-      <h1 class="text-4xl text-slate-800 mb-7 font-semibold">Reset password</h1>
-      <h3 class="text-md text-slate-800 mb-7 font-normal">
+      <h1 class="text-4xl text-slate-200 mb-7 font-semibold">Reset password</h1>
+      <h3 class="text-md text-slate-200 mb-7 font-normal">
         Please, enter a new password. If you have not requested this password
         change, please ignore this page.
       </h3>
@@ -91,7 +91,7 @@ async function resetPassword(dataForm) {
 
       setTimeout(() => {
         router.push({ name: "login" });
-      }, 5000);
+      }, 3000);
     } catch (err) {
       console.log(err);
       showError.value = true;
