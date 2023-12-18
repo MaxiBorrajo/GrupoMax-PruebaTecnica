@@ -85,6 +85,7 @@ const userStore = useUserStore();
 const showPassword = ref(false);
 
 async function register(dataForm) {
+  showError.value = false;
   const { valid } = await form.value.validate();
 
   if (valid) {

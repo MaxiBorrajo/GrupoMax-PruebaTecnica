@@ -1,11 +1,14 @@
 <template>
   <section class="flex justify-center items-center bg-slate-200 min-h-screen">
     <div
-      class="w-96 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit
-      sm:rounded-md"
+      class="w-96 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
       <h1 class="text-4xl text-slate-200 mb-7 font-semibold">Login CRM</h1>
-      <ErrorComponent v-if="showError" :error-message="errorMessage" class="mb-7"/>
+      <ErrorComponent
+        v-if="showError"
+        :error-message="errorMessage"
+        class="mb-7"
+      />
       <v-form
         ref="form"
         @submit.prevent="login(loginForm)"
@@ -71,13 +74,14 @@ const userStore = useUserStore();
 const showPassword = ref(false);
 
 async function login(dataForm) {
+  showError.value = false;
   const { valid } = await form.value.validate();
 
   if (valid) {
     try {
       const result = await userStore.login(dataForm);
-      
-      VueCookies.set("user",result.resource);
+
+      VueCookies.set("user", result.resource);
       VueCookies.set("token", result.token);
 
       router.push({ name: "dashboard" });
@@ -90,5 +94,4 @@ async function login(dataForm) {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

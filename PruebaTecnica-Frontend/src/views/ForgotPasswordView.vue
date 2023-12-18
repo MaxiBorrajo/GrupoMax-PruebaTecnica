@@ -1,5 +1,6 @@
 <template>
   <section class="flex justify-center items-center bg-slate-200 min-h-screen">
+    <BackButtonComponent />
     <div
       class="sm:w-1/2 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
@@ -40,7 +41,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useUserStore } from "@/stores/UserStore";
-import router from "../router/index";
+import BackButtonComponent from "@/components/BackButtonComponent.vue";
 import SubmitButtonComponent from "@/components/SubmitButtonComponent.vue";
 import FormInputComponent from "@/components/FormInputComponent.vue";
 import ErrorComponent from "@/components/ErrorComponent.vue";
@@ -60,6 +61,7 @@ const forgotPasswordForm = ref({
 const userStore = useUserStore();
 
 async function forgotPassword(dataForm) {
+  showError.value = false;
   const { valid } = await form.value.validate();
 
   if (valid) {

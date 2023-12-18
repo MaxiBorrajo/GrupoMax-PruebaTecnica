@@ -105,6 +105,7 @@ async function getClients(
   limit = 20
 ) {
   try {
+    showError.value = false;
     loading.value = true;
     const result = await clientStore.getClients(
       sortBy,
@@ -125,6 +126,7 @@ async function getClients(
 
 async function deleteClient() {
   try {
+    showError.value = false;
     const result = await clientStore.deleteClient(clientIdToDelete.value);
 
     if (result) {

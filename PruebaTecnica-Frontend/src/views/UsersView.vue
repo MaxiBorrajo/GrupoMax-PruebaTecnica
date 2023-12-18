@@ -61,6 +61,7 @@ async function getUsers(
   limit = 20
 ) {
   try {
+    showError.value = false;
     loading.value = true;
     const result = await userStore.getUsers(
       sortBy,

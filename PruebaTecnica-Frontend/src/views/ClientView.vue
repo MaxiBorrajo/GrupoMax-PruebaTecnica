@@ -2,8 +2,9 @@
   <section
     class="flex justify-center items-center min-h-screen bg-slate-200 sm:py-10"
   >
+  <BackButtonComponent />
     <div
-      class="w-96 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
+      class="w-96 px-8 py-20 lg:p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
       <h1 class="text-4xl text-slate-200 mb-7 font-semibold">Edit client</h1>
       <ErrorComponent
@@ -85,6 +86,7 @@ import ErrorComponent from "@/components/ErrorComponent.vue";
 import SuccessComponent from "@/components/SuccessComponent.vue";
 import rules from "@/utils/rules";
 import { useRoute } from "vue-router";
+import BackButtonComponent from "@/components/BackButtonComponent.vue";
 
 const form = ref(null);
 const route = useRoute();
@@ -106,6 +108,7 @@ const successMessage = ref(null);
 const clientStore = useClientStore();
 
 async function updateClient(dataForm) {
+  showError.value = false;
   const { valid } = await form.value.validate();
 
   if (valid) {
@@ -125,15 +128,16 @@ async function updateClient(dataForm) {
 }
 
 async function getClient() {
+  showError.value = false;
   try {
     const result = await clientStore.getClient(route.params.id);
 
-    clientForm.value.first_name= result.resource.fullname.split(" ")[0];
-    clientForm.value.last_name=result.resource.fullname.split(" ")[1];
-    clientForm.value.email=result.resource.email;
-    clientForm.value.age=result.resource.age;
-    clientForm.value.phone_number=result.resource.phone_number;
-    clientForm.value.status=result.resource.status;
+    clientForm.value.first_name = result.resource.fullname.split(" ")[0];
+    clientForm.value.last_name = result.resource.fullname.split(" ")[1];
+    clientForm.value.email = result.resource.email;
+    clientForm.value.age = result.resource.age;
+    clientForm.value.phone_number = result.resource.phone_number;
+    clientForm.value.status = result.resource.status;
   } catch (err) {
     console.log(err);
     showError.value = true;

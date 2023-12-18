@@ -81,6 +81,7 @@ const resetPasswordForm = ref({
 const userStore = useUserStore();
 
 async function resetPassword(dataForm) {
+  showError.value = false;
   const { valid } = await form.value.validate();
 
   if (valid) {
