@@ -5,7 +5,7 @@
     <div
       class="w-96 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
-      <h1 class="text-4xl text-slate-200 mb-7 font-semibold">Register CRM</h1>
+      <h1 class="text-4xl text-slate-200 mb-7 font-semibold">Add new client</h1>
       <ErrorComponent
         v-if="showError"
         :error-message="errorMessage"
@@ -13,47 +13,50 @@
       />
       <v-form
         ref="form"
-        @submit.prevent="register(registerForm)"
+        @submit.prevent="createClient(clientForm)"
         class="flex flex-col justify-center gap-y-2"
       >
         <FormInputComponent
-          v-model="registerForm.first_name"
+          v-model="clientForm.first_name"
           input-label="First name"
           :input-rules="[rules.required]"
           input-type="text"
         />
         <FormInputComponent
-          v-model="registerForm.last_name"
+          v-model="clientForm.last_name"
           input-label="Last name"
           :input-rules="[rules.required]"
           input-type="text"
         />
         <FormInputComponent
-          v-model="registerForm.email"
+          v-model="clientForm.email"
           input-label="Email"
           :input-rules="[rules.required, rules.email]"
           input-type="email"
         />
-
         <FormInputComponent
-          v-model="registerForm.password"
-          input-label="Password"
-          :input-rules="[rules.required, rules.password]"
-          :input-append-inner-icon="
-            showPassword ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye'
-          "
-          @click:append-inner="showPassword = !showPassword"
-          :input-type="showPassword ? 'text' : 'password'"
+          v-model="clientForm.age"
+          input-label="Age"
+          :input-rules="[
+            rules.required,
+            rules.maximumValue(99),
+            rules.minimumValue(1),
+          ]"
+          input-type="number"
         />
-
-        <router-link
-          :to="{ name: 'login' }"
-          class="text-slate-800 text-md font-light hover:text-slate-100 mb-3"
-        >
-          Have an account?
-        </router-link>
-
-        <SubmitButtonComponent button-label="Sign up" />
+        <FormInputComponent
+          v-model="clientForm.phone_number"
+          input-label="Phone number"
+          :input-rules="[rules.required]"
+          input-type="tel"
+        />
+        <v-radio-group v-model="clientForm.status" inline>
+          <v-radio label="Active" value="ACTIVE" color="white" class="text-slate-50"></v-radio>
+          <v-spacer></v-spacer>
+          <v-radio label="Inactive" value="INACTIVE" color="white"
+          class="text-slate-50"></v-radio>
+        </v-radio-group>
+        <SubmitButtonComponent button-label="Create" />
       </v-form>
     </div>
   </section>
@@ -61,41 +64,39 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useUserStore } from "@/stores/UserStore";
+import { useClientStore } from "@/stores/ClientStore";
 import router from "../router/index";
 import SubmitButtonComponent from "@/components/SubmitButtonComponent.vue";
 import FormInputComponent from "@/components/FormInputComponent.vue";
 import ErrorComponent from "@/components/ErrorComponent.vue";
 import rules from "@/utils/rules";
-import VueCookies from "vue-cookies";
+
 const form = ref(null);
 
 const showError = ref(false);
 const errorMessage = ref(null);
 
-const registerForm = ref({
+const clientForm = ref({
   first_name: null,
   last_name: null,
   email: null,
-  password: null,
+  age: null,
+  phone_number: null,
+  status: "ACTIVE",
 });
 
-const userStore = useUserStore();
+const clientStore = useClientStore();
 
-const showPassword = ref(false);
-
-async function register(dataForm) {
+async function createClient(dataForm) {
   const { valid } = await form.value.validate();
 
   if (valid) {
     try {
-      const result = await userStore.createUser(dataForm);
+      const result = await clientStore.createClient(dataForm);
 
-      VueCookies.set("user", result.resource);
-
-      VueCookies.set("token", result.token);
-
-      router.push({ name: "dashboard" });
+      if (result) {
+        router.push({ name: "dashboard" });
+      }
     } catch (err) {
       console.log(err);
       showError.value = true;

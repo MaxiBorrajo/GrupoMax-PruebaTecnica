@@ -33,25 +33,23 @@ export const useUserStore = defineStore("userStore", () => {
     }
   }
 
-  async function getCurrentUser() {
+  async function getUsers(
+    sort = "",
+    order = "",
+    page = 1,
+    filters = null,
+    limit = 20
+  ) {
     try {
-      const result = await axios.get("/users/current");
+      let url = `/users?page=${page}&limit=${limit}`;
 
-      return result.data;
-    } catch (error) {
-      throw error;
-    }
-  }
+      url = applySorting(sort, order, url);
 
-  async function getUsers(sort = "", order = "", page = 1, filters = null) {
-    try {
-      let url = `/users?page=${page}`;
-      
-      applySorting(sort, order, url);
+      url = applyFiltering(filters, url);
 
-      applyFiltering(filters, url);
+      console.log(url);
 
-      const result = await axios.get("url");
+      const result = await axios.get(url);
 
       return result.data;
     } catch (error) {
@@ -63,14 +61,18 @@ export const useUserStore = defineStore("userStore", () => {
     if (sort && order) {
       url = url + `&sort=${sort}&order=${order}`;
     }
+
+    return url;
   }
 
   function applyFiltering(filters, url) {
     if (filters && filters.length > 0) {
       filters.forEach((filter) => {
-        url = url + `&filter=${filter.filter}&filterValue=${filter.value}`;
+        url = url + `&${filter.filter}=${filter.value}`;
       });
     }
+
+    return url;
   }
 
   async function updateUser(data) {

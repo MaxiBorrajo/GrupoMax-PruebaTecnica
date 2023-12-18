@@ -22,9 +22,27 @@
       :search="search"
       @update:options="loadItems"
     >
+      <template v-slot:top>
+        <div class="w-full bg-white rounded-t-md border-b flex p-3 justify-end">
+          <v-btn
+            class="text-cyan-500"
+            prepend-icon="fa-solid fa-plus"
+            variant="outlined"
+            :to="{ name: 'createClient' }"
+            >New item</v-btn
+          >
+        </div>
+      </template>
       <template v-slot:item.actions="{ item }">
         <span class="flex justify-around w-full"
-          ><i class="fa-solid fa-pen cursor-pointer hover:text-cyan-500"></i>
+          ><i
+            class="fa-solid fa-pen cursor-pointer hover:text-cyan-500"
+            @click="
+              () => {
+                router.push({ name: 'client', params: { id: item.id } });
+              }
+            "
+          ></i>
           <i
             class="fa-solid fa-trash-can cursor-pointer hover:text-red-500"
             @click="openDialog(item.id)"
@@ -49,6 +67,7 @@ import SearchBarComponent from "@/components/SearchBarComponent.vue";
 import { useClientStore } from "@/stores/ClientStore";
 import ErrorComponent from "@/components/ErrorComponent.vue";
 import DeleteClientDialogComponent from "@/components/DeleteClientDialogComponent.vue";
+import router from "@/router";
 const clientStore = useClientStore();
 
 const showError = ref(false);

@@ -20,6 +20,15 @@ function sendMessageIfConditionNotMet(condition, message) {
         "Passwords don't match"
       );
     },
+    phone_number: (value) => {
+      const regularExpression =
+      /^\(?\d{2}\)?[\s\.-]?\d{4}[\s\.-]?\d{4}$/;
+  
+      return sendMessageIfConditionNotMet(
+        regularExpression.test(value),
+        "Invalid phone number format"
+      );
+    },
     password: (value) => {
       const regularExpressionPassword =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;

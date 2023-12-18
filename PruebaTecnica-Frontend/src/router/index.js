@@ -6,6 +6,7 @@ import ForgotPasswordView from "../views/ForgotPasswordView.vue";
 import ResetPasswordView from "../views/ResetPasswordView.vue";
 import UserView from "../views/UserView.vue";
 import ClientView from "../views/ClientView.vue";
+import CreateClientView from "../views/CreateClientView.vue";
 import DashboardView from "../views/DashboardView.vue";
 import ErrorView from "../views/ErrorView.vue";
 
@@ -60,6 +61,14 @@ const router = createRouter({
       path: "/profile",
       name: "profile",
       component: UserView,
+      meta: {
+        requireAuth: true,
+      },
+    },
+    {
+      path: "/createClient",
+      name: "createClient",
+      component: CreateClientView,
       meta: {
         requireAuth: true,
       },

@@ -14,7 +14,7 @@
         <FormInputComponent
           v-model="loginForm.email"
           input-label="Email"
-          :input-rules="[rules.required]"
+          :input-rules="[rules.required, rules.email]"
           input-type="email"
         />
         <FormInputComponent
