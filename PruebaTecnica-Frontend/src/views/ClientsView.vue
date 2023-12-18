@@ -6,8 +6,13 @@
       ><h1 class="text-4xl font-bold">My clients</h1>
       <SearchBarComponent v-model="search" />
     </span>
+    <ErrorComponent
+      v-if="showError"
+      :error-message="errorMessage"
+      class="mb-7"
+    />
     <v-data-table-server
-      class="rounded-md"
+      class="rounded-md text-sm"
       v-if="data"
       :items-per-page="+data.per_page"
       :headers="headers"
@@ -19,13 +24,22 @@
     >
       <template v-slot:item.actions="{ item }">
         <span class="flex justify-around w-full"
-          ><i class="fa-solid fa-pen cursor-pointer hover:text-cyan-500"></i> <i class="fa-solid fa-trash-can cursor-pointer hover:text-cyan-500"></i
+          ><i class="fa-solid fa-pen cursor-pointer hover:text-cyan-500"></i>
+          <i
+            class="fa-solid fa-trash-can cursor-pointer hover:text-red-500"
+            @click="openDialog(item.id)"
+          ></i
         ></span>
       </template>
       <template v-slot:no-data>
         <h1>No clients found</h1>
       </template>
     </v-data-table-server>
+    <DeleteClientDialogComponent
+      v-model="showDialog"
+      :closeDelete="closeDialog"
+      :delete-client="deleteClient"
+    />
   </div>
 </template>
 
@@ -33,8 +47,13 @@
 import { onBeforeMount, ref, watch } from "vue";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
 import { useClientStore } from "@/stores/ClientStore";
-
+import ErrorComponent from "@/components/ErrorComponent.vue";
+import DeleteClientDialogComponent from "@/components/DeleteClientDialogComponent.vue";
 const clientStore = useClientStore();
+
+const showError = ref(false);
+const errorMessage = ref(null);
+const clientIdToDelete = ref(null);
 const headers = ref([
   {
     title: "First name",
@@ -51,20 +70,82 @@ const headers = ref([
   { title: "Actions", key: "actions", sortable: false },
 ]);
 const data = ref(null);
+const sort = ref(null);
+const order = ref(null);
 const loading = ref(false);
 const search = ref(null);
+const currentPage = ref(null);
+const limit = ref(null);
+const showDialog = ref(false);
 
-async function getClients(page = 1, sortBy = "", orderBy = "", filters = null, limit=20) {
-  loading.value = true;
-  const result = await clientStore.getClients(sortBy, orderBy, page, filters,limit);
+async function getClients(
+  page = 1,
+  sortBy = "",
+  orderBy = "",
+  filters = null,
+  limit = 20
+) {
+  try {
+    loading.value = true;
+    const result = await clientStore.getClients(
+      sortBy,
+      orderBy,
+      page,
+      filters,
+      limit
+    );
 
-  data.value = result.resource;
-  loading.value = false;
+    data.value = result.resource;
+    loading.value = false;
+  } catch (err) {
+    console.log(err);
+    showError.value = true;
+    errorMessage.value = err.response.data.error;
+  }
+}
+
+async function deleteClient() {
+  try {
+    const result = await clientStore.deleteClient(clientIdToDelete.value);
+
+    if (result) {
+      const filters = [];
+
+      if (search.value) {
+        filters.push({ filter: "keyword", value: search.value });
+      }
+
+      await getClients(
+        currentPage.value,
+        sort.value,
+        order.value,
+        filters,
+        limit.value
+      );
+
+      closeDialog();
+    }
+  } catch (err) {
+    console.log(err);
+    showError.value = true;
+    errorMessage.value = err.response.data.error;
+  }
+}
+
+function openDialog(idClient) {
+  showDialog.value = true;
+  clientIdToDelete.value = idClient;
+}
+
+function closeDialog() {
+  showDialog.value = false;
 }
 
 async function loadItems({ page, sortBy, search, itemsPerPage }) {
-  const sort = sortBy.length > 0 ? sortBy[0].key : "";
-  const order = sortBy.length > 0 ? sortBy[0].order : "";
+  sort.value = sortBy.length > 0 ? sortBy[0].key : "";
+  order.value = sortBy.length > 0 ? sortBy[0].order : "";
+  currentPage.value = page;
+  limit.value = itemsPerPage;
   const filters = [];
 
   if (search) {
@@ -73,7 +154,7 @@ async function loadItems({ page, sortBy, search, itemsPerPage }) {
 
   itemsPerPage = itemsPerPage === -1 ? data.value.total : itemsPerPage;
 
-  await getClients(page, sort, order, filters, itemsPerPage);
+  await getClients(page.value, sort.value, order.value, filters, itemsPerPage);
 }
 
 onBeforeMount(async () => {
