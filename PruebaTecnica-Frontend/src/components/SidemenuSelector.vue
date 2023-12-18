@@ -4,8 +4,7 @@
   >
     <i :class="icon"></i>
     <p
-      class="text-[15px] ml-3"
-      :class="important ? 'font-bold' : 'font-normal'"
+      class="text-[15px] ml-3 font-normal'"
     >
       {{ label }}
     </p>
@@ -15,8 +14,7 @@
 <script setup>
 const props = defineProps({
   icon: String,
-  label: String,
-  important: Boolean,
+  label: String
 });
 </script>
 
