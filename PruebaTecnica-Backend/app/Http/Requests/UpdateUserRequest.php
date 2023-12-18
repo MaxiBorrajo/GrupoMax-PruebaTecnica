@@ -10,7 +10,7 @@ class UpdateUserRequest extends ApiRequest
     public function rules(): array
     {
         return [
-            'email' => 'email|unique:users,email',
+            'email' => 'email',
         ];
     }
 }

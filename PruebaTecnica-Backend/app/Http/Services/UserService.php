@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Services;
 
+use App\Exceptions\EmailAlreadyTakenException;
 use App\Exceptions\InvalidCredentialsException;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\LoginRequest;
@@ -78,19 +79,27 @@ class UserService
 
     public function getUserByEmail(string $email)
     {
-            return User::where('email', $email)->firstOrFail();
+        return User::where('email', $email)->firstOrFail();
 
     }
 
     public function getUserById($id)
     {
-            return User::findOrFail($id);
+        return User::findOrFail($id);
 
+    }
+
+    private function validateUniqueEmail(Request $request, string $email)
+    {
+        if ($request->email && $request->email != $email && $this->getUserByEmail($request->email)) {
+            throw new EmailAlreadyTakenException();
+        }
     }
 
     public function updateUser(UpdateUserRequest $request, $user_id)
     {
         $user = $this->getUserById($user_id);
+        $this->validateUniqueEmail($request, $user->email);
         $user->update($request->all());
         return $user;
     }

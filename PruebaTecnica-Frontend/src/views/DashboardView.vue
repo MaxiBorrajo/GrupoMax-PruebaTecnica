@@ -38,6 +38,7 @@
           :important="false"
           class="absolute bottom-0 w-full"
           label="Log out"
+          @click="logout"
         />
       </div>
     </div>
@@ -55,13 +56,15 @@ import { ref } from "vue";
 import VueCookies from "vue-cookies";
 import SidemenuSelector from "@/components/SidemenuSelector.vue";
 import FirstSidemenuSelector from "@/components/FirstSidemenuSelector.vue";
-
+import { useUserStore } from "@/stores/UserStore";
 import UsersView from "./UsersView.vue";
 import ClientsView from "./ClientsView.vue";
 import router from "@/router";
+
 const user = ref(VueCookies.get("user"));
 const sidebar = ref(null);
 const selected = ref("clients");
+const userStore = useUserStore();
 
 function show() {
   sidebar.value.style = "display:block";
@@ -69,6 +72,20 @@ function show() {
 
 function close() {
   sidebar.value.style = "display:hidden";
+}
+
+async function logout() {
+  try {
+    const result = await userStore.logout();
+
+    if (result) {
+      VueCookies.remove("token");
+      VueCookies.remove("user");
+      router.push({ name: "login" });
+    }
+  } catch (err) {
+    alert(err.response.data.error);
+  }
 }
 </script>
 
