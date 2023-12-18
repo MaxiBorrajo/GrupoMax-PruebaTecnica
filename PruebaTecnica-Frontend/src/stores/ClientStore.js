@@ -13,9 +13,9 @@ export const useClientStore = defineStore("clientStore", () => {
     }
   }
 
-  async function getClients(sort = "", order = "", page = 1, filters = null) {
+  async function getClients(sort = "", order = "", page = 1, filters = null, limit=20) {
     try {
-      let url = `/clients?page=${page}`;
+      let url = `/clients?page=${page}&limit=${limit}`;
 
       url = applySorting(sort, order, url);
 
@@ -40,7 +40,7 @@ export const useClientStore = defineStore("clientStore", () => {
   function applyFiltering(filters, url) {
     if (filters && filters.length > 0) {
       filters.forEach((filter) => {
-        url = url + `&filter=${filter.filter}&filterValue=${filter.value}`;
+        url = url + `&${filter.filter}=${filter.value}`;
       });
     }
 

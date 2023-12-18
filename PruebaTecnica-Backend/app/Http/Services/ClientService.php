@@ -23,7 +23,9 @@ class ClientService
         $this->applyFilters($request, $clients);
         $this->applySorting($request, $clients);
 
-        $clients = $clients->paginate(20)->appends($request->query());
+        $limit = $request->query('limit');
+
+        $clients = $clients->paginate(+$limit)->appends($request->query());
 
         return $clients;
     }
@@ -31,7 +33,6 @@ class ClientService
     private function applyFilters(Request $request, $query)
     {
         $keyword = $request->query('keyword');
-        $status = $request->query('status');
 
         if ($keyword) {
             $query->where(function ($query) use ($keyword) {
@@ -39,12 +40,6 @@ class ClientService
                     ->orWhere('last_name', 'LIKE', "%{$keyword}%")
                     ->orWhere('email', 'LIKE', "%{$keyword}%")
                     ->orWhere("phone_number", "LIKE", "%{$keyword}%");
-            });
-        }
-
-        if ($status) {
-            $query->where(function ($query) use ($status) {
-                $query->where('status', $status);
             });
         }
     }
