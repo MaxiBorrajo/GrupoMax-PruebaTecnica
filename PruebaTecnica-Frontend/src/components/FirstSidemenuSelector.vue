@@ -1,6 +1,6 @@
 <template>
     <div
-      class="p-2.5 mt-1 flex items-center hover:bg-slate-200 hover:text-cyan-500 w-full"
+      class="p-2.5 mt-1 flex items-center hover:bg-slate-200 hover:text-cyan-500 w-full rounded-md"
     >
       <i class="fa-solid fa-circle-user"></i>
       <p

@@ -17,9 +17,9 @@ export const useClientStore = defineStore("clientStore", () => {
     try {
       let url = `/clients?page=${page}`;
 
-      applySorting(sort, order, url);
+      url = applySorting(sort, order, url);
 
-      applyFiltering(filters, url);
+      url = applyFiltering(filters, url);
 
       const result = await axios.get(url);
 
@@ -33,6 +33,8 @@ export const useClientStore = defineStore("clientStore", () => {
     if (sort && order) {
       url = url + `&sort=${sort}&order=${order}`;
     }
+
+    return url;
   }
 
   function applyFiltering(filters, url) {
@@ -41,6 +43,8 @@ export const useClientStore = defineStore("clientStore", () => {
         url = url + `&filter=${filter.filter}&filterValue=${filter.value}`;
       });
     }
+
+    return url;
   }
 
   async function getClient(id) {
