@@ -76,8 +76,6 @@ async function login(dataForm) {
   if (valid) {
     try {
       const result = await userStore.login(dataForm);
-
-      console.log(result);
       
       VueCookies.set("user", result.resource);
       VueCookies.set("token", result.token);

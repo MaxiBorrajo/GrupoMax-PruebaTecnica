@@ -31,7 +31,7 @@
           input-type="email"
         />
 
-        <SubmitButtonComponent button-label="Sign in" />
+        <SubmitButtonComponent button-label="Send" />
       </v-form>
     </div>
   </section>
