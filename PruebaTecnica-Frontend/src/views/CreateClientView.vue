@@ -118,7 +118,7 @@ async function createClient(dataForm) {
       loading.value = false;
       console.log(err);
       showError.value = true;
-      errorMessage.value = err.response.data.error;
+      errorMessage.value = err.response;
     }
   }
 }

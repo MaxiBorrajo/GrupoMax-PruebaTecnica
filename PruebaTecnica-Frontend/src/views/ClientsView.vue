@@ -122,7 +122,7 @@ async function getClients(
     loading.value = false;
     console.log(err);
     showError.value = true;
-    errorMessage.value = err.response.data.error;
+    errorMessage.value = err.response;
   }
 }
 
@@ -151,7 +151,7 @@ async function deleteClient() {
   } catch (err) {
     console.log(err);
     showError.value = true;
-    errorMessage.value = err.response.data.error;
+    errorMessage.value = err.response;
   }
 }
 

@@ -110,7 +110,7 @@ async function updateUser(dataForm) {
       loading.value = false;
       console.log(err);
       showError.value = true;
-      errorMessage.value = err.response.data.error;
+      errorMessage.value = err.response;
     }
   }
 }
@@ -126,7 +126,7 @@ async function getUser() {
   } catch (err) {
     console.log(err);
     showError.value = true;
-    errorMessage.value = err.response.data.error;
+    errorMessage.value = err.response;
   }
 }
 
@@ -144,7 +144,7 @@ async function deleteUser() {
   } catch (err) {
     console.log(err);
     showError.value = true;
-    errorMessage.value = err.response.data.error;
+    errorMessage.value = err.response;
   }
 }
 
