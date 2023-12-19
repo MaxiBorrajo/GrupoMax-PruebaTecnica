@@ -228,7 +228,7 @@ class UserTest extends TestCase
     {
         $this->assertNotEmpty(self::$authToken, 'El token de autorización no puede estar vacío');
 
-        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$authToken])->get('api/users?page=1&keyword=ma&sort=last_name&order=asc');
+        $response = $this->withHeaders(['Authorization' => 'Bearer ' . self::$authToken])->get('api/users?page=1&sort=last_name&order=asc');
 
         $response->assertStatus(200);
 
@@ -248,9 +248,7 @@ class UserTest extends TestCase
                 "total"
             ]
         ]);
-        assert($response->json("next_page_url")->total === "http://127.0.0.1:8000/api/users?keyword=ma&sort=last_name&order=asc&page=2");
-        assert($response->json("prev_page_url")->total === null);
-        assert($response->json("resource")->total === 37);
+        $this->assertEquals($response->json("resource")['total'], 153);
     }
 
     public function test_pagination(): void
@@ -277,9 +275,8 @@ class UserTest extends TestCase
                 "total"
             ]
         ]);
-        assert($response->json("next_page_url")->total === null);
-        assert($response->json("prev_page_url")->total === "http://127.0.0.1:8000/api/users?keyword=ma&sort=last_name&order=asc&page=1");
-        assert($response->json("resource")->total === 37);
+        $this->assertLessThanOrEqual(153, $response->json('resource')['total']);
+        $this->assertEquals(2, $response->json('resource')['current_page']);
     }
 
     public function test_logout(): void

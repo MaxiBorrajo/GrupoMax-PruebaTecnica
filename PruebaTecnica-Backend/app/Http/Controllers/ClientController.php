@@ -44,14 +44,14 @@ class ClientController extends Controller
     {
             $client = $this->clientService->updateClient($request, $id);
 
-            return response()->json(['message' => 'Client updated succesfully',
+            return response()->json(['message' => 'Client updated successfully',
                 'resource' => $client], 200);
 
     }
     public function destroy(Request $request, string $id): JsonResponse
     {
             $this->clientService->deleteClient($id, $request->user()->id);
-            return response()->json(['message' => 'Client deleted succesfully'], 200);
+            return response()->json(['message' => 'Client deleted successfully'], 200);
 
     }
 }
