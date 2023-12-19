@@ -40,9 +40,25 @@
           :input-rules="[rules.required, rules.email]"
           input-type="email"
         />
-        <SubmitButtonComponent button-label="Update" :button-loading="loading"/>
+        <span class="w-fit flex flex-col gap-y-5">
+          <SubmitButtonComponent
+            button-label="Update"
+            :button-loading="loading"
+          />
+          <v-btn
+            @click="openDialog"
+            class="bg-red-500 text-slate-200 hover:bg-red-700 w-fit"
+            >Delete account</v-btn
+          >
+        </span>
       </v-form>
     </div>
+    <DeleteDialogComponent
+      v-model="showDialog"
+      :close-delete="closeDialog"
+      :delete-action="deleteUser"
+      label="Are you sure you want to delete your account? All information will be lost"
+    />
   </section>
 </template>
 
@@ -56,11 +72,13 @@ import SuccessComponent from "@/components/SuccessComponent.vue";
 import rules from "@/utils/rules";
 import BackButtonComponent from "@/components/BackButtonComponent.vue";
 import VueCookies from "vue-cookies";
+import router from "@/router";
+import DeleteDialogComponent from "@/components/DeleteDialogComponent.vue";
 
 const form = ref(null);
 const showError = ref(false);
 const errorMessage = ref(null);
-
+const showDialog = ref(false);
 const userForm = ref({
   first_name: null,
   last_name: null,
@@ -110,6 +128,32 @@ async function getUser() {
     showError.value = true;
     errorMessage.value = err.response.data.error;
   }
+}
+
+async function deleteUser() {
+  try {
+    showError.value = false;
+    const result = await userStore.deleteUser();
+
+    if (result) {
+      closeDialog();
+      VueCookies.remove("token");
+      VueCookies.remove("user");
+      router.push({ name: "login" });
+    }
+  } catch (err) {
+    console.log(err);
+    showError.value = true;
+    errorMessage.value = err.response.data.error;
+  }
+}
+
+function openDialog() {
+  showDialog.value = true;
+}
+
+function closeDialog() {
+  showDialog.value = false;
 }
 
 onBeforeMount(async () => {

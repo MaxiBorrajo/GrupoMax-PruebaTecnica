@@ -74,6 +74,7 @@ async function getUsers(
     data.value = result.resource;
     loading.value = false;
   } catch (err) {
+    loading.value = false;
     console.log(err);
     showError.value = true;
     errorMessage.value = err.response.data.error;

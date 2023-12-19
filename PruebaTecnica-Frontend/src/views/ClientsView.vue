@@ -53,10 +53,11 @@
         <h1>No clients found</h1>
       </template>
     </v-data-table-server>
-    <DeleteClientDialogComponent
+    <DeleteDialogComponent
       v-model="showDialog"
-      :closeDelete="closeDialog"
-      :delete-client="deleteClient"
+      :close-delete="closeDialog"
+      :delete-action="deleteClient"
+      label="Are you sure you want to delete this client? All information will be lost"
     />
   </div>
 </template>
@@ -66,7 +67,7 @@ import { onBeforeMount, ref, watch } from "vue";
 import SearchBarComponent from "@/components/SearchBarComponent.vue";
 import { useClientStore } from "@/stores/ClientStore";
 import ErrorComponent from "@/components/ErrorComponent.vue";
-import DeleteClientDialogComponent from "@/components/DeleteClientDialogComponent.vue";
+import DeleteDialogComponent from "@/components/DeleteDialogComponent.vue";
 import router from "@/router";
 const clientStore = useClientStore();
 
@@ -118,6 +119,7 @@ async function getClients(
     data.value = result.resource;
     loading.value = false;
   } catch (err) {
+    loading.value = false;
     console.log(err);
     showError.value = true;
     errorMessage.value = err.response.data.error;

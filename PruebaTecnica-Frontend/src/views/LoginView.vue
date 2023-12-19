@@ -90,7 +90,7 @@ async function login(dataForm) {
         router.push({ name: "dashboard" });
       }
     } catch (err) {
-      loading.value = true;
+      loading.value = false;
       console.log(err);
       showError.value = true;
       errorMessage.value = err.response.data.error;
