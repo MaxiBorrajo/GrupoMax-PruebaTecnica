@@ -23,7 +23,9 @@ class UserService
         $this->applyKeywordFilter($request, $users);
         $this->applySorting($request, $users);
 
-        $users = $users->paginate(20)->appends($request->query());
+        $limit = $request->query('limit') ?  $request->query('limit') : 20;
+
+        $users = $users->paginate(+$limit)->appends($request->query());
 
         return $users;
     }

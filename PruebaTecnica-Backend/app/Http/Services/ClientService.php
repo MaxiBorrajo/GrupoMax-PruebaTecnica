@@ -23,7 +23,7 @@ class ClientService
         $this->applyFilters($request, $clients);
         $this->applySorting($request, $clients);
 
-        $limit = $request->query('limit');
+        $limit = $request->query('limit') ?  $request->query('limit') : 20;
 
         $clients = $clients->paginate(+$limit)->appends($request->query());
 
