@@ -78,7 +78,7 @@ class UserController extends Controller
 
         $user = $this->userService->updateUser($request, $user_id);
 
-        return response()->json(['message' => 'User updated succesfully',
+        return response()->json(['message' => 'User updated successfully',
             'resource' => new UserResource($user)], 200);
 
     }
@@ -86,7 +86,7 @@ class UserController extends Controller
     {
         $this->userService->deleteUser($request->user()->id);
 
-        return response()->json(['message' => 'User deleted succesfully'], 200);
+        return response()->json(['message' => 'User deleted successfully'], 200);
 
     }
 
