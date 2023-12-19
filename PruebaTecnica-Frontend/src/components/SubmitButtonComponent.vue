@@ -6,6 +6,7 @@
       :append-icon="buttonAppendIcon"
       :prepend-icon="buttonPrependIcon"
       :disabled="buttonDisabled"
+      :loading="buttonLoading"
       >{{ buttonLabel }}</v-btn
     >
   </template>
@@ -16,7 +17,8 @@
     buttonLabel: String,
     buttonAppendIcon: String,
     buttonPrependIcon: String,
-    buttonDisabled: Boolean
+    buttonDisabled: Boolean,
+    buttonLoading:Boolean
   });
   </script>
   

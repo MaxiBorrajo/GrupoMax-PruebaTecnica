@@ -44,14 +44,14 @@
             Forgot password?
           </router-link>
         </span>
-        <SubmitButtonComponent button-label="Sign in" />
+        <SubmitButtonComponent button-label="Sign in" :button-loading="loading"/>
       </v-form>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useUserStore } from "@/stores/UserStore";
 import router from "../router/index";
 import SubmitButtonComponent from "@/components/SubmitButtonComponent.vue";
@@ -63,7 +63,7 @@ const form = ref(null);
 
 const showError = ref(false);
 const errorMessage = ref(null);
-
+const loading = ref(false);
 const loginForm = ref({
   email: null,
   password: null,
@@ -75,17 +75,22 @@ const showPassword = ref(false);
 
 async function login(dataForm) {
   showError.value = false;
+  loading.value = true;
   const { valid } = await form.value.validate();
 
   if (valid) {
     try {
       const result = await userStore.login(dataForm);
 
-      VueCookies.set("user", result.resource);
-      VueCookies.set("token", result.token);
+      if (result) {
+        loading.value = false;
+        VueCookies.set("user", result.resource);
+        VueCookies.set("token", result.token);
 
-      router.push({ name: "dashboard" });
+        router.push({ name: "dashboard" });
+      }
     } catch (err) {
+      loading.value = true;
       console.log(err);
       showError.value = true;
       errorMessage.value = err.response.data.error;

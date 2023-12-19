@@ -12,7 +12,7 @@
     >
       <div class="text-slate-200 text-xl flex flex-col h-full relative">
         <FirstSidemenuSelector
-          :label="user.fullname"
+          :label="user.first_name +' ' + user.last_name"
           :close-action="close"
           :profile-action="
             () => {

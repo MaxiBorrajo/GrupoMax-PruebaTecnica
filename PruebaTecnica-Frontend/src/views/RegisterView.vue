@@ -53,7 +53,7 @@
           Have an account?
         </router-link>
 
-        <SubmitButtonComponent button-label="Sign up" />
+        <SubmitButtonComponent button-label="Sign up" :button-loading="loading"/>
       </v-form>
     </div>
   </section>
@@ -72,7 +72,7 @@ const form = ref(null);
 
 const showError = ref(false);
 const errorMessage = ref(null);
-
+const loading = ref(false);
 const registerForm = ref({
   first_name: null,
   last_name: null,
@@ -85,6 +85,7 @@ const userStore = useUserStore();
 const showPassword = ref(false);
 
 async function register(dataForm) {
+  loading.value = true;
   showError.value = false;
   const { valid } = await form.value.validate();
 
@@ -92,12 +93,16 @@ async function register(dataForm) {
     try {
       const result = await userStore.createUser(dataForm);
 
-      VueCookies.set("user", result.resource);
+      if (result) {
+        loading.value = false;
+        VueCookies.set("user", result.resource);
 
-      VueCookies.set("token", result.token);
+        VueCookies.set("token", result.token);
 
-      router.push({ name: "dashboard" });
+        router.push({ name: "dashboard" });
+      }
     } catch (err) {
+      loading.value = false;
       console.log(err);
       showError.value = true;
       errorMessage.value = err.response.data.error;

@@ -2,7 +2,7 @@
   <section
     class="flex justify-center items-center min-h-screen bg-slate-200 sm:py-10"
   >
-  <BackButtonComponent />
+    <BackButtonComponent />
     <div
       class="w-96 lg:p-8 px-8 py-20 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
@@ -66,14 +66,17 @@
             class="text-slate-50"
           ></v-radio>
         </v-radio-group>
-        <SubmitButtonComponent button-label="Create" />
+        <SubmitButtonComponent
+          button-label="Create"
+          :button-loading="loading"
+        />
       </v-form>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { useClientStore } from "@/stores/ClientStore";
 import router from "../router/index";
 import SubmitButtonComponent from "@/components/SubmitButtonComponent.vue";
@@ -83,7 +86,7 @@ import rules from "@/utils/rules";
 import BackButtonComponent from "@/components/BackButtonComponent.vue";
 
 const form = ref(null);
-
+const loading = ref(false);
 const showError = ref(false);
 const errorMessage = ref(null);
 
@@ -99,6 +102,7 @@ const clientForm = ref({
 const clientStore = useClientStore();
 
 async function createClient(dataForm) {
+  loading.value = true;
   showError.value = false;
   const { valid } = await form.value.validate();
 
@@ -107,9 +111,11 @@ async function createClient(dataForm) {
       const result = await clientStore.createClient(dataForm);
 
       if (result) {
+        loading.value = false;
         router.push({ name: "dashboard" });
       }
     } catch (err) {
+      loading.value = false;
       console.log(err);
       showError.value = true;
       errorMessage.value = err.response.data.error;

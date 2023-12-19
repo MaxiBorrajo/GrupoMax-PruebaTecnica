@@ -2,7 +2,7 @@
   <section
     class="flex justify-center items-center min-h-screen bg-slate-200 sm:py-10"
   >
-  <BackButtonComponent />
+    <BackButtonComponent />
     <div
       class="w-96 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
@@ -40,7 +40,7 @@
           :input-rules="[rules.required, rules.email]"
           input-type="email"
         />
-        <SubmitButtonComponent button-label="Update" />
+        <SubmitButtonComponent button-label="Update" :button-loading="loading"/>
       </v-form>
     </div>
   </section>
@@ -55,6 +55,7 @@ import ErrorComponent from "@/components/ErrorComponent.vue";
 import SuccessComponent from "@/components/SuccessComponent.vue";
 import rules from "@/utils/rules";
 import BackButtonComponent from "@/components/BackButtonComponent.vue";
+import VueCookies from "vue-cookies";
 
 const form = ref(null);
 const showError = ref(false);
@@ -65,13 +66,14 @@ const userForm = ref({
   last_name: null,
   email: null,
 });
-
+const loading = ref(false);
 const showSuccess = ref(false);
 const successMessage = ref(null);
 
 const userStore = useUserStore();
 
 async function updateUser(dataForm) {
+  loading.value = true;
   showError.value = false;
   const { valid } = await form.value.validate();
 
@@ -80,10 +82,14 @@ async function updateUser(dataForm) {
       const result = await userStore.updateUser(dataForm);
 
       if (result) {
+        VueCookies.remove("user");
+        VueCookies.set("user", result.resource);
+        loading.value = false;
         showSuccess.value = true;
         successMessage.value = result.message;
       }
     } catch (err) {
+      loading.value = false;
       console.log(err);
       showError.value = true;
       errorMessage.value = err.response.data.error;
@@ -96,8 +102,8 @@ async function getUser() {
   try {
     const result = await userStore.getCurrentUser();
 
-    userForm.value.first_name = result.resource.fullname.split(" ")[0];
-    userForm.value.last_name = result.resource.fullname.split(" ")[1];
+    userForm.value.first_name = result.resource.first_name;
+    userForm.value.last_name = result.resource.last_name;
     userForm.value.email = result.resource.email;
   } catch (err) {
     console.log(err);

@@ -48,7 +48,7 @@
           "
         />
 
-        <SubmitButtonComponent button-label="Change password" />
+        <SubmitButtonComponent button-label="Change password" :button-loading="loading" />
       </v-form>
     </div>
   </section>
@@ -77,16 +77,18 @@ const resetPasswordForm = ref({
   confirm_password: null,
   token: route.params.token,
 });
-
+const loading = ref(false);
 const userStore = useUserStore();
 
 async function resetPassword(dataForm) {
+  loading.value = true;
   showError.value = false;
   const { valid } = await form.value.validate();
 
   if (valid) {
     try {
       const result = await userStore.resetPassword(dataForm);
+      loading.value = false;
       showSuccess.value = true;
       successMessage.value = result.message;
 
@@ -94,6 +96,7 @@ async function resetPassword(dataForm) {
         router.push({ name: "login" });
       }, 3000);
     } catch (err) {
+      loading.value = false;
       console.log(err);
       showError.value = true;
       errorMessage.value = err.response.data.error;

@@ -32,7 +32,7 @@
           input-type="email"
         />
 
-        <SubmitButtonComponent button-label="Send" />
+        <SubmitButtonComponent button-label="Send" :button-label="loading" />
       </v-form>
     </div>
   </section>
@@ -47,8 +47,9 @@ import FormInputComponent from "@/components/FormInputComponent.vue";
 import ErrorComponent from "@/components/ErrorComponent.vue";
 import SuccessComponent from "@/components/SuccessComponent.vue";
 import rules from "@/utils/rules";
-const form = ref(null);
 
+const form = ref(null);
+const loading = ref(false);
 const showError = ref(false);
 const errorMessage = ref(null);
 const showSuccess = ref(false);
@@ -61,6 +62,7 @@ const forgotPasswordForm = ref({
 const userStore = useUserStore();
 
 async function forgotPassword(dataForm) {
+  loading.value = true;
   showError.value = false;
   const { valid } = await form.value.validate();
 
@@ -68,9 +70,11 @@ async function forgotPassword(dataForm) {
     try {
       const result = await userStore.forgotPassword(dataForm);
 
+      loading.value = false;
       showSuccess.value = true;
       successMessage.value = result.message;
     } catch (err) {
+      loading.value = false;
       console.log(err);
       showError.value = true;
       errorMessage.value = err.response.data.error;

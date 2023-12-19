@@ -71,7 +71,7 @@
             class="text-slate-50"
           ></v-radio>
         </v-radio-group>
-        <SubmitButtonComponent button-label="Update" />
+        <SubmitButtonComponent button-label="Update" :button-loading="loading" />
       </v-form>
     </div>
   </section>
@@ -92,7 +92,7 @@ const form = ref(null);
 const route = useRoute();
 const showError = ref(false);
 const errorMessage = ref(null);
-
+const loading = ref(false);
 const clientForm = ref({
   first_name: null,
   last_name: null,
@@ -108,6 +108,7 @@ const successMessage = ref(null);
 const clientStore = useClientStore();
 
 async function updateClient(dataForm) {
+  loading.value = true;
   showError.value = false;
   const { valid } = await form.value.validate();
 
@@ -116,10 +117,12 @@ async function updateClient(dataForm) {
       const result = await clientStore.updateClient(route.params.id, dataForm);
 
       if (result) {
+        loading.value = false;
         showSuccess.value = true;
         successMessage.value = result.message;
       }
     } catch (err) {
+      loading.value = false;
       console.log(err);
       showError.value = true;
       errorMessage.value = err.response.data.error;
@@ -132,8 +135,8 @@ async function getClient() {
   try {
     const result = await clientStore.getClient(route.params.id);
 
-    clientForm.value.first_name = result.resource.fullname.split(" ")[0];
-    clientForm.value.last_name = result.resource.fullname.split(" ")[1];
+    clientForm.value.first_name = result.resource.first_name;
+    clientForm.value.last_name = result.resource.last_name;
     clientForm.value.email = result.resource.email;
     clientForm.value.age = result.resource.age;
     clientForm.value.phone_number = result.resource.phone_number;

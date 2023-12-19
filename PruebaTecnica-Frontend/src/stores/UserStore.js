@@ -47,8 +47,6 @@ export const useUserStore = defineStore("userStore", () => {
 
       url = applyFiltering(filters, url);
 
-      console.log(url);
-
       const result = await axios.get(url);
 
       return result.data;

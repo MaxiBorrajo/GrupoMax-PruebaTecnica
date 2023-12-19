@@ -9,8 +9,7 @@
         <v-btn @click="closeDelete" class="bg-cyan-500 text-slate-200"
           >Cancel</v-btn
         >
-        <v-btn @click="deleteClient" class="bg-cyan-500 text-slate-200 hover:bg-red-500"
-          >OK</v-btn
+        <v-btn @click="deleteClient" class="bg-cyan-500 text-slate-200 hover:bg-red-500">OK</v-btn
         >
       </v-card-actions>
     </v-card>
@@ -20,7 +19,7 @@
 <script setup>
 const props = defineProps({
   closeDelete: Function,
-  deleteClient: Function,
+  deleteClient: Function
 });
 </script>
 
