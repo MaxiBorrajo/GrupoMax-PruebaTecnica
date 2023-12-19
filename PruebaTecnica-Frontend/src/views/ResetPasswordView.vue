@@ -8,11 +8,7 @@
         Please, enter a new password. If you have not requested this password
         change, please ignore this page.
       </h3>
-      <ErrorComponent
-        v-if="showError"
-        :error-message="errorMessage"
-        class="mb-7"
-      />
+      <ErrorComponent v-if="showError" :error="error" class="mb-7" />
       <SuccessComponent
         v-if="showSuccess"
         :success-message="successMessage"
@@ -48,7 +44,10 @@
           "
         />
 
-        <SubmitButtonComponent button-label="Change password" :button-loading="loading" />
+        <SubmitButtonComponent
+          button-label="Change password"
+          :button-loading="loading"
+        />
       </v-form>
     </div>
   </section>
@@ -68,7 +67,7 @@ import { useRoute } from "vue-router";
 const form = ref(null);
 const route = useRoute();
 const showError = ref(false);
-const errorMessage = ref(null);
+const error = ref(null);
 const showSuccess = ref(false);
 const successMessage = ref(null);
 const showPassword = ref(false);
@@ -99,7 +98,7 @@ async function resetPassword(dataForm) {
       loading.value = false;
       console.log(err);
       showError.value = true;
-      errorMessage.value = err.response;
+      error.value = err.response;
     }
   }
 }

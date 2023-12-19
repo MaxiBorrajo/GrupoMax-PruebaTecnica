@@ -7,11 +7,7 @@
       class="w-96 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
       <h1 class="text-4xl text-slate-200 mb-7 font-semibold">Edit profile</h1>
-      <ErrorComponent
-        v-if="showError"
-        :error-message="errorMessage"
-        class="mb-7"
-      />
+      <ErrorComponent v-if="showError" :error="error" class="mb-7" />
       <SuccessComponent
         v-if="showSuccess"
         :success-message="successMessage"
@@ -77,7 +73,7 @@ import DeleteDialogComponent from "@/components/DeleteDialogComponent.vue";
 
 const form = ref(null);
 const showError = ref(false);
-const errorMessage = ref(null);
+const error = ref(null);
 const showDialog = ref(false);
 const userForm = ref({
   first_name: null,
@@ -110,7 +106,7 @@ async function updateUser(dataForm) {
       loading.value = false;
       console.log(err);
       showError.value = true;
-      errorMessage.value = err.response;
+      error.value = err.response;
     }
   }
 }
@@ -126,7 +122,7 @@ async function getUser() {
   } catch (err) {
     console.log(err);
     showError.value = true;
-    errorMessage.value = err.response;
+    error.value = err.response;
   }
 }
 
@@ -144,7 +140,7 @@ async function deleteUser() {
   } catch (err) {
     console.log(err);
     showError.value = true;
-    errorMessage.value = err.response;
+    error.value = err.response;
   }
 }
 

@@ -9,7 +9,7 @@
       <h1 class="text-4xl text-slate-200 mb-7 font-semibold">Edit client</h1>
       <ErrorComponent
         v-if="showError"
-        :error-message="errorMessage"
+        :error="error"
         class="mb-7"
       />
       <SuccessComponent
@@ -91,7 +91,7 @@ import BackButtonComponent from "@/components/BackButtonComponent.vue";
 const form = ref(null);
 const route = useRoute();
 const showError = ref(false);
-const errorMessage = ref(null);
+const error = ref(null);
 const loading = ref(false);
 const clientForm = ref({
   first_name: null,
@@ -125,7 +125,7 @@ async function updateClient(dataForm) {
       loading.value = false;
       console.log(err);
       showError.value = true;
-      errorMessage.value = err.response;
+      error.value = err.response;
     }
   }
 }
@@ -144,7 +144,7 @@ async function getClient() {
   } catch (err) {
     console.log(err);
     showError.value = true;
-    errorMessage.value = err.response;
+    error.value = err.response;
   }
 }
 

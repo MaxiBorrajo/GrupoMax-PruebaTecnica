@@ -8,7 +8,7 @@
     </span>
     <ErrorComponent
       v-if="showError"
-      :error-message="errorMessage"
+      :error="error"
       class="mb-7"
     />
     <v-data-table-server
@@ -72,7 +72,7 @@ import router from "@/router";
 const clientStore = useClientStore();
 
 const showError = ref(false);
-const errorMessage = ref(null);
+const error= ref(null);
 const clientIdToDelete = ref(null);
 const headers = ref([
   {
@@ -122,7 +122,7 @@ async function getClients(
     loading.value = false;
     console.log(err);
     showError.value = true;
-    errorMessage.value = err.response;
+    error.value = err.response;
   }
 }
 
@@ -151,7 +151,7 @@ async function deleteClient() {
   } catch (err) {
     console.log(err);
     showError.value = true;
-    errorMessage.value = err.response;
+    error.value = err.response;
   }
 }
 

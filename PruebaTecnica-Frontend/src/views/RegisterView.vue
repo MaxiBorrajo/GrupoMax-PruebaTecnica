@@ -6,11 +6,7 @@
       class="w-96 p-8 shadow-lg bg-cyan-500 flex flex-col justify-center min-h-screen sm:min-h-fit sm:rounded-md"
     >
       <h1 class="text-4xl text-slate-200 mb-7 font-semibold">Register CRM</h1>
-      <ErrorComponent
-        v-if="showError"
-        :error-message="errorMessage"
-        class="mb-7"
-      />
+      <ErrorComponent v-if="showError" :error="error" class="mb-7" />
       <v-form
         ref="form"
         @submit.prevent="register(registerForm)"
@@ -53,7 +49,10 @@
           Have an account?
         </router-link>
 
-        <SubmitButtonComponent button-label="Sign up" :button-loading="loading"/>
+        <SubmitButtonComponent
+          button-label="Sign up"
+          :button-loading="loading"
+        />
       </v-form>
     </div>
   </section>
@@ -71,7 +70,7 @@ import VueCookies from "vue-cookies";
 const form = ref(null);
 
 const showError = ref(false);
-const errorMessage = ref(null);
+const error = ref(null);
 const loading = ref(false);
 const registerForm = ref({
   first_name: null,
@@ -105,7 +104,7 @@ async function register(dataForm) {
       loading.value = false;
       console.log(err);
       showError.value = true;
-      errorMessage.value = err.response;
+      error.value = err.response;
     }
   }
 }

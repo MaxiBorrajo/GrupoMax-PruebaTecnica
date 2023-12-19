@@ -6,11 +6,7 @@
       ><h1 class="text-4xl font-bold">Users</h1>
       <SearchBarComponent v-model="search" />
     </span>
-    <ErrorComponent
-      v-if="showError"
-      :error-message="errorMessage"
-      class="mb-7"
-    />
+    <ErrorComponent v-if="showError" :error="error" class="mb-7" />
     <v-data-table-server
       class="rounded-md text-sm"
       v-if="data"
@@ -37,7 +33,7 @@ import ErrorComponent from "@/components/ErrorComponent.vue";
 const userStore = useUserStore();
 
 const showError = ref(false);
-const errorMessage = ref(null);
+const error = ref(null);
 const headers = ref([
   {
     title: "First name",
@@ -77,7 +73,7 @@ async function getUsers(
     loading.value = false;
     console.log(err);
     showError.value = true;
-    errorMessage.value = err.response;
+    error.value = err.response;
   }
 }
 

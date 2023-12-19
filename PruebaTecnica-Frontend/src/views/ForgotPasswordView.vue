@@ -12,7 +12,7 @@
       </h3>
       <ErrorComponent
         v-if="showError"
-        :error-message="errorMessage"
+        :error="error"
         class="mb-7"
       />
       <SuccessComponent
@@ -51,7 +51,7 @@ import rules from "@/utils/rules";
 const form = ref(null);
 const loading = ref(false);
 const showError = ref(false);
-const errorMessage = ref(null);
+const error = ref(null);
 const showSuccess = ref(false);
 const successMessage = ref(null);
 
@@ -77,7 +77,7 @@ async function forgotPassword(dataForm) {
       loading.value = false;
       console.log(err);
       showError.value = true;
-      errorMessage.value = err.response;
+      error.value = err.response;
     }
   }
 }
